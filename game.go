@@ -356,9 +356,9 @@ func (g *Game) removeFromHand(seat int, cards []Card) {
 func (g *Game) validateNewMeld(team *Team, cards []Card) (string, error) {
 	nat, _ := g.split(cards)
 
-	fmt.Printf(" \nnat[0] = %s", nat[0])
+	//fmt.Printf(" \nnat[0] = %s", nat[0])
 
-	if len(cards) < 3 &&  !g.isJoker(nat[0]) {
+	if len(cards) < 3 && !g.isJoker(nat[0]) {
 		return "", errors.New("a meld needs at least 3 cards")
 	}
 	// nat, wild := g.split(cards)
