@@ -1,0 +1,130 @@
+/* Spectator "table" screen: sized for a TV / tablet in landscape, scales with the viewport. */
+
+body.tablepage { overflow: hidden; --u: min(1vw, 1.7vh); }
+#app { height: 100vh; height: 100dvh; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: calc(var(--u) * 1); padding: calc(var(--u) * 1.2); }
+
+/* --- scoreboard --- */
+#top { display: grid; grid-template-columns: 1fr minmax(0, 1.1fr) 1fr; gap: calc(var(--u) * 1.5); align-items: stretch; }
+.teamcard {
+  background: var(--panel); border-radius: 16px; border-top: 5px solid var(--tc);
+  padding: calc(var(--u) * .9) calc(var(--u) * 1.6);
+  display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 12px;
+}
+.teamcard .tname { font-weight: 700; font-size: calc(var(--u) * 1.7); color: var(--tc); }
+.teamcard .tsub { grid-column: 1; font-size: calc(var(--u) * 1.15); color: var(--muted); }
+.teamcard .score { grid-column: 2; grid-row: 1 / span 2; font: 800 calc(var(--u) * 5.2) ui-serif, Georgia, serif; font-variant-numeric: tabular-nums; line-height: 1; }
+.teamcard .badges { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; min-height: 1.4em; }
+.teamcard.counts-first { box-shadow: 0 0 0 2px var(--tc), 0 0 26px color-mix(in srgb, var(--tc) 55%, transparent); }
+
+.center-info { text-align: center; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.center-info h1 { font-size: calc(var(--u) * 3.2); color: var(--gold); line-height: 1; }
+.center-info .status { font-size: calc(var(--u) * 1.9); font-weight: 600; }
+.center-info .meta { font-size: calc(var(--u) * 1.2); color: var(--muted); }
+
+/* --- felt --- */
+.felt {
+  --cw: clamp(30px, calc(var(--u) * 4.6), 70px);
+  position: relative; min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 17%) minmax(0, 1fr) minmax(0, 17%);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: calc(var(--u) * 1);
+  padding: calc(var(--u) * 1.6);
+  border-radius: calc(var(--u) * 5);
+  background: radial-gradient(ellipse at 50% 42%, #1c8456 0%, #0f5c3a 58%, #0a402a 100%);
+  box-shadow: inset 0 0 0 calc(var(--u) * .5) #70491f, inset 0 0 0 calc(var(--u) * .8) #3a220d, 0 14px 48px rgba(0,0,0,.55);
+}
+.seatslot { display: grid; place-items: center; min-width: 0; }
+.seatslot.n { grid-column: 2; grid-row: 1; }
+.seatslot.s { grid-column: 2; grid-row: 3; }
+.seatslot.w { grid-column: 1; grid-row: 2; }
+.seatslot.e { grid-column: 3; grid-row: 2; }
+
+.seat {
+  --cw: clamp(16px, calc(var(--u) * 2), 30px);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: calc(var(--u) * .8) calc(var(--u) * 1.4); min-width: min(100%, calc(var(--u) * 17));
+  border-radius: 16px; background: rgba(0,0,0,.3); border: 3px solid transparent;
+  border-bottom: 4px solid var(--tc);
+  text-align: center;
+}
+.seat.empty { opacity: .45; }
+/* North and South sit along the long edges: lay their panel out in a single row so the middle of the felt keeps its height for the melds. */
+.seatslot.n .seat, .seatslot.s .seat {
+  flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: calc(var(--u) * .3) calc(var(--u) * 1.2); padding: calc(var(--u) * .6) calc(var(--u) * 1.6); min-width: 0;
+}
+.seatslot.n .seat .schips, .seatslot.s .seat .schips { min-height: 0; }
+.seat .sname { font-weight: 700; font-size: calc(var(--u) * 1.7); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.seat .sdir { font-size: calc(var(--u) * 1.05); color: var(--muted); text-transform: uppercase; letter-spacing: .14em; }
+.seat .schips { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; min-height: 1.3em; }
+.seat .backs { display: flex; padding-right: calc(var(--cw) * .6); }
+.seat .backs .card { margin-right: calc(var(--cw) * -.6); }
+.seat .scount { font-size: calc(var(--u) * 1.15); color: var(--muted); }
+.seat.turn { border-color: var(--gold); animation: pulse 1.6s ease-in-out infinite; }
+.seat.offline .sname::after { content: " (away)"; font-weight: 400; color: #ff9c92; font-size: .75em; }
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(234,184,74,.35); }
+  50% { box-shadow: 0 0 30px rgba(234,184,74,.85); }
+}
+
+/* --- centre: piles + each team's meld tray next to the player who collects them --- */
+.middle {
+  grid-column: 2; grid-row: 2; min-width: 0; min-height: 0;
+  display: grid; gap: calc(var(--u) * .8);
+  grid-template-columns: minmax(0, 1fr) calc(var(--u) * 20) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: "tn tn tn" "tw piles te" "ts ts ts";
+}
+.tn { grid-area: tn; } .ts { grid-area: ts; } .tw { grid-area: tw; } .te { grid-area: te; }
+.piles { grid-area: piles; display: flex; gap: calc(var(--u) * 2.4); align-items: flex-start; justify-content: center; padding: 0 calc(var(--u) * 1); }
+.piles .pile { --cw: clamp(34px, calc(var(--u) * 5), 78px); }
+
+.tray {
+  --cw: clamp(16px, calc(var(--u) * 2.1), 32px);
+  display: flex; flex-wrap: wrap; gap: calc(var(--u) * .6); align-content: center; justify-content: center;
+  min-width: 0; min-height: 0; overflow: visible;
+}
+.tray .tlabel { flex: 0 0 100%; text-align: center; font-size: calc(var(--u) * 1.05); letter-spacing: .12em; text-transform: uppercase; color: var(--tc); }
+.tray.tn { align-content: flex-end; }
+.tray.ts { align-content: flex-start; }
+.tray .meld { font-size: calc(var(--u) * 1.2); padding: 3px 6px 3px 5px; gap: 5px; }
+.tray .meld .mpts { display: none; }
+.tray .meld .mlabel { font-size: calc(var(--u) * 1.7); }
+
+/* --- footer --- */
+#bottom { display: flex; align-items: flex-start; gap: 14px; min-height: calc(var(--u) * 3); }
+.log { flex: 1; display: flex; gap: 18px; overflow: hidden; font-size: calc(var(--u) * 1.2); color: var(--muted); white-space: nowrap; mask-image: linear-gradient(90deg, transparent, #000 4%); -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%); justify-content: flex-end; }
+.log span:last-child { color: var(--ink); font-weight: 600; }
+.host { position: relative; font-size: .8rem; color: var(--muted); }
+.host summary { cursor: pointer; list-style: none; opacity: .55; padding: 4px 8px; }
+.host[open] summary { opacity: 1; }
+.hostbtns { position: absolute; right: 0; bottom: 28px; background: #10261a; border: 1px solid rgba(255,255,255,.2); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-width: 190px; z-index: 20; }
+
+/* --- lobby overlay --- */
+.joinurl { font: 700 1.3rem ui-monospace, Menlo, Consolas, monospace; color: var(--gold); background: rgba(0,0,0,.35); padding: 8px 12px; border-radius: 10px; display: inline-block; margin: 4px 0; word-break: break-all; }
+.seatlist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 4px; }
+.seatlist div { background: rgba(0,0,0,.28); border-left: 4px solid var(--tc); border-radius: 8px; padding: 8px 10px; text-align: left; }
+.seatlist small { display: block; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; font-size: .65rem; }
+.seatlist .free { opacity: .55; }
+
+@media (max-aspect-ratio: 1/1) {
+  /* portrait tablets: stack the scoreboard and give the felt more height */
+  #top { grid-template-columns: 1fr 1fr; }
+  .center-info { grid-column: 1 / -1; order: -1; }
+  body.tablepage { --u: min(1.5vw, 1.2vh); }
+  .felt { grid-template-columns: minmax(0, 20%) minmax(0, 1fr) minmax(0, 20%); }
+}
+
+/* East and West players sit at the short edges of the table: turn their panels 90 degrees so each reads upright from that player's chair (West looks east, East looks west). */
+.seatslot.w, .seatslot.e { position: relative; }
+.seatslot.w .seat, .seatslot.e .seat {
+  position: absolute; top: 50%; left: 50%;
+  width: calc(var(--u) * 30); min-width: 0;
+  flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: calc(var(--u) * .3) calc(var(--u) * 1.2);
+  padding: calc(var(--u) * .6) calc(var(--u) * 1.2);
+}
+.seatslot.w .seat .schips, .seatslot.e .seat .schips { min-height: 0; }
+.seatslot.w .seat { transform: translate(-50%, -50%) rotate(90deg); }
+.seatslot.e .seat { transform: translate(-50%, -50%) rotate(-90deg); }

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a402a">
+<title>Queens – Player</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="play.css">
+</head>
+<body class="playpage">
+
+<!-- ============ seat picker ============ -->
+<section id="join" class="landing hidden">
+  <div class="box">
+    <h1>Queens</h1>
+    <p class="tag">Pick a seat. Your partner sits across from you.</p>
+    <label class="field">Your name
+      <input id="name" type="text" maxlength="18" autocomplete="nickname" placeholder="e.g. Roger">
+    </label>
+    <div class="seatpick" id="seatpick"></div>
+    <p class="hint" id="joinhint"></p>
+  </div>
+</section>
+
+<!-- ============ game ============ -->
+<div id="game" class="hidden">
+  <header id="hud">
+    <div class="score t0" id="sc0"></div>
+    <div class="status" id="status"></div>
+    <div class="score t1" id="sc1"></div>
+  </header>
+
+  <div id="opps" class="opps"></div>
+
+  <main id="board">
+    <section id="tablecenter">
+      <div id="piles" class="piles"></div>
+      <div id="pilehint" class="pilehint"></div>
+    </section>
+    <section id="melds">
+      <div class="meldgroup mine" id="mymelds"></div>
+      <div class="meldgroup theirs" id="theirmelds"></div>
+    </section>
+  </main>
+
+  <section id="handarea">
+    <div class="handbar">
+      <label class="switch" title="Keep the hand sorted by rank">
+        <input type="checkbox" id="autosort" checked><span class="track"></span><span>Auto-sort</span>
+      </label>
+      <span class="sel" id="selinfo"></span>
+      <button class="btn ghost small" id="clear" type="button">Clear</button>
+    </div>
+    <div id="hand" class="hand" role="list" aria-label="Your hand"></div>
+    <div id="actions" class="actions"></div>
+  </section>
+</div>
+
+<div id="overlay" class="overlay hidden"><div class="panel" id="panel"></div></div>
+<div id="drag" class="dragghost hidden"></div>
+
+<script src="common.js"></script>
+<script src="play.js"></script>
+</body>
+</html>

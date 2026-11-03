@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Queens – Table</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="table.css">
+</head>
+<body class="tablepage">
+<div id="app">
+  <header id="top">
+    <section class="teamcard t0" id="team0"></section>
+    <section class="center-info" id="info"></section>
+    <section class="teamcard t1" id="team1"></section>
+  </header>
+
+  <main id="felt" class="felt">
+    <div class="seatslot n" id="seat0"></div>
+    <div class="seatslot e" id="seat1"></div>
+    <div class="seatslot s" id="seat2"></div>
+    <div class="seatslot w" id="seat3"></div>
+    <div class="middle">
+      <div class="tray tn" id="tray0"></div>
+      <div class="tray tw" id="tray3"></div>
+      <div class="piles" id="piles"></div>
+      <div class="tray te" id="tray1"></div>
+      <div class="tray ts" id="tray2"></div>
+    </div>
+  </main>
+
+  <footer id="bottom">
+    <div id="log" class="log" aria-live="polite"></div>
+    <details class="host">
+      <summary>Host</summary>
+      <div class="hostbtns" id="hostbtns"></div>
+    </details>
+  </footer>
+</div>
+
+<div id="overlay" class="overlay hidden"><div class="panel" id="panel"></div></div>
+
+<script src="common.js"></script>
+<script src="table.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Queens</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<section class="landing">
+  <div class="box">
+    <h1>Queens</h1>
+    <p class="tag">A partnership card game for four. Two teams, two decks, first to 2000.</p>
+    <a class="btn big" href="/table">Open the table screen <small>(TV / laptop – everyone watches this)</small></a>
+    <a class="btn big ghost" href="/play">Join as a player <small>(phone / tablet)</small></a>
+    <p class="hint" id="lan"></p>
+    <details>
+      <summary>How to play</summary>
+      <ul>
+        <li>Partners sit across from each other (North/South vs East/West). Each player is dealt 13 cards; one card is turned up to start the discard pile.</li>
+        <li>A meld is 3 or more cards of one rank, or 2 naturals plus a wild card. Only 2s are wild; jokers are not. Wild cards must be outnumbered by naturals.</li>
+        <li>Each turn: draw a card (or take the pile), meld or add to your team's melds, then discard. The first player of a hand must draw.</li>
+        <li>To take the pile your team must already be down, and you need two naturals of the top card's rank (or one natural and a wild). A wild on top, or a rank your team has already melded, blocks it.</li>
+        <li>Empty your hand to win the hand. Cards: 3–9 = 5, 10/J/Q/K/A = 10, 2 = 25, Joker = 50, Q♠ = 100. The winners add their melds; the others subtract the cards left in hand and add their melds. The team that did not deal counts first.</li>
+      </ul>
+    </details>
+  </div>
+</section>
+<script>
+fetch('/api/info').then(r => r.json()).then(j => {
+  if (j.urls && j.urls.length) document.getElementById('lan').textContent = 'Phones on your network: ' + j.urls.map(u => u + '/play').join('   ');
+}).catch(() => {});
+</script>
+</body>
+</html>
