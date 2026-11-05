@@ -22,9 +22,10 @@ const (
 var seatNames = [NumSeats]string{"North", "East", "South", "West"}
 
 // Seats 0 and 2 (North/South) are team 0; seats 1 and 3 (East/West) are team 1.
-func teamOf(seat int) int    { return seat % 2 }
-func partnerOf(seat int) int { return (seat + 2) % NumSeats }
-func nextSeat(seat int) int  { return (seat + 1) % NumSeats } // clockwise from above
+func teamOf(seat int) int { return seat % 2 }
+
+// func partnerOf(seat int) int { return (seat + 2) % NumSeats }
+func nextSeat(seat int) int { return (seat + 1) % NumSeats } // clockwise from above
 
 // ---------------------------------------------------------------- cards
 
@@ -100,7 +101,7 @@ type Rules struct {
 }
 
 func DefaultRules() Rules {
-	return Rules{TargetScore: 2000, JokersWild: false, PickupRequiresDown: true}
+	return Rules{TargetScore: 2000, JokersWild: false, PickupRequiresDown: true, DealBonus: true}
 }
 
 // ---------------------------------------------------------------- state
@@ -291,6 +292,14 @@ func (g *Game) checkDealBonus() {
 	if !g.Rules.DealBonus {
 		return
 	}
+	// generate a random number between 1 an 10
+	random1 := rand.IntN(10) + 1
+	// generate a random number between 1 an 10
+	random2 := rand.IntN(10) + 1
+	// if both numbers are the same...award the dealing team 100 points instantly.
+	if random1 == random2 {
+		g.logf("100 points bitches - Hand %d: %s deals. %s is turned up. %s plays first.", g.HandNo, g.name(g.Dealer), g.Discard[0], g.name(g.Turn))
+	}
 }
 
 // ---------------------------------------------------------------- helpers
@@ -361,7 +370,7 @@ func (g *Game) validateNewMeld(team *Team, cards []Card) (string, error) {
 	if len(cards) < 3 && !g.isJoker(nat[0]) {
 		return "", errors.New("a meld needs at least 3 cards")
 	}
-	// nat, wild := g.split(cards)
+
 	if !team.Down() {
 		for _, c := range cards {
 			if c.Rank == "JOKER" { // } && g.Rules.JokersWild {
@@ -369,9 +378,11 @@ func (g *Game) validateNewMeld(team *Team, cards []Card) (string, error) {
 			}
 		}
 	}
-	if len(nat) < 2 && !g.isJoker(nat[0]) {
-		return "", errors.New("a meld needs at least 2 natural cards (wild cards can't start one)")
-	}
+
+	//	if len(nat) < 2 && !g.isJoker(nat[0]) {
+	//		return "", errors.New("a meld needs at least 2 natural cards (wild cards can't start one)")
+	//	}
+
 	rank := nat[0].Rank
 	for _, c := range nat {
 		if c.Rank != rank {
@@ -676,6 +687,10 @@ func (g *Game) meldPoints(team int) int {
 	n := 0
 	for _, m := range g.Teams[team].Melds {
 		n += sumPoints(m.Cards)
+		nat, _ := g.split(m.Cards)
+		if len(nat) == 8 {
+			n += 100
+		}
 	}
 	return n
 }

@@ -154,11 +154,11 @@ func TestNewMeldRules(t *testing.T) {
 		{"four naturals and a wild", []string{"KS", "KH", "KD", "KC", "2C"}, ""},
 		{"three naturals and two wilds", []string{"KS", "KH", "KD", "2C", "2D"}, ""},
 		{"three jokers (not wild)", []string{"JK", "JK", "JK"}, ""},
+		{"one natural and two wilds", []string{"KS", "2C", "2D"}, ""},
 		{"jokers are not wild", []string{"KS", "KH", "JK"}, "same rank"},
 		{"only two cards", []string{"KS", "KH"}, "at least 3"},
-		{"one natural and two wilds", []string{"KS", "2C", "2D"}, "at least 2 natural"},
-		{"all wilds", []string{"2S", "2H", "2D"}, "at least 2 natural"},
-		{"two naturals and two wilds", []string{"KS", "KH", "2C", "2D"}, "outnumbered"},
+		{"all wilds", []string{"2S", "2H", "2D"}, "at least 1 natural"},
+		{"two naturals and two wilds", []string{"KS", "KH", "2C", "2D"}, ""},
 		{"mixed ranks", []string{"KS", "KH", "QD"}, "same rank"},
 	}
 	for _, tc := range cases {

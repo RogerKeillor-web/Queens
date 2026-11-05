@@ -98,6 +98,8 @@
     for (const id of [...selected]) if (!ids.has(id)) selected.delete(id);
     if (known.size && S.game.phase === 'playing') {
       ids.forEach((id) => { if (!known.has(id)) fresh.add(id); });
+      // highlight the 'fresh' card
+      fresh.forEach((id) => { selected.add(id); });
       if (fresh.size) setTimeout(() => { fresh.clear(); document.querySelectorAll('.card.fresh').forEach((n) => n.classList.remove('fresh')); }, 2200);
     }
     known = ids;
