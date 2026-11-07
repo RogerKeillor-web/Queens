@@ -402,16 +402,17 @@ func (g *Game) validateAdd(m *Meld, cards []Card) error {
 	if len(cards) == 0 {
 		return errors.New("select the cards to add first")
 	}
-	nat, wild := g.split(m.Cards)
-	n2, w2 := g.split(cards)
+	//nat, wild := g.split(m.Cards)
+	//n2, w2 := g.split(cards)
+	n2, _ := g.split(cards)
 	for _, c := range n2 {
 		if c.Rank != m.Rank {
 			return fmt.Errorf("only %ss and wild cards can be added to that meld", m.Rank)
 		}
 	}
-	if len(wild)+len(w2) >= len(nat)+len(n2) {
-		return errors.New("wild cards must stay outnumbered by natural cards in a meld")
-	}
+	//if len(wild)+len(w2) >= len(nat)+len(n2) {
+	//	return errors.New("wild cards must stay outnumbered by natural cards in a meld")
+	//}
 	return nil
 }
 
